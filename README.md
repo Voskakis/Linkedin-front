@@ -26,6 +26,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+# TODO
+
+* remove duplicate signin prompt
+* add signup option
+* implement unauthorized/authorized redirects
+
 # NOTES FOR FINAL README
 
 * next.js as a subframework for react because it offers the developer the power to choose when rendering something by seperating components between client and server
