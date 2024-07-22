@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from "@mui/material"
 import { signIn } from "next-auth/react"
  
