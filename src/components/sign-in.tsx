@@ -1,4 +1,5 @@
 import { signIn } from "@/auth"
+import SignInButton from "@/components/signin-button";
  
 export function SignIn() {
   return (
@@ -16,7 +17,7 @@ export function SignIn() {
         Password
         <input name="password" type="password" />
       </label>
-      <button>Sign In</button>
+      <SignInButton />
     </form>
   )
 }
