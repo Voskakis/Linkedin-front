@@ -25,3 +25,10 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+# NOTES FOR FINAL README
+
+* next.js as a subframework for react because it offers the developer the power to choose when rendering something by seperating components between client and server
+* next-auth for authorization, because it offers variety of providers, plus for given framework, there isn't any other complete library
+* mui for components because it offers all-around support with nice definitions and powerful component properties
+* context-api for state handling
