@@ -36,4 +36,4 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 * next.js as a subframework for react because it offers the developer the power to choose when rendering something by seperating components between client and server
 * next-auth for authorization, because it offers variety of providers, plus for given framework, there isn't any other complete library
 * mui for components because it offers all-around support with nice definitions and powerful component properties
-* context-api for state handling
+* context-api and react state for state handling
