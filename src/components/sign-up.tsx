@@ -1,12 +1,11 @@
 'use client';
 
-import { signIn } from "@/auth"
 import { emailValid } from "@/lib/validations";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment } from "@mui/material";
 import React, { useState } from "react";
 
-export default function SignIn() {
+export default function SignUp() {
 
   const [emailValue, setEmailValue] = useState('');
   const [pwdValue, setPwdValue] = useState('');
@@ -16,13 +15,13 @@ export default function SignIn() {
     <FormControl required>
       {!emailValid(emailValue) && <FormHelperText>Please provide a valid email address.</FormHelperText>}
       <Input 
-        id='signin-form-email' 
+        id='signup-form-email' 
         type='email'
         value={emailValue}
         onChange={x => {setEmailValue(x.target.value);}}
       />
       <Input 
-        id='signin-form-password' 
+        id='signup-form-password' 
         type={showPassword ? 'text' : 'password'}
         value={pwdValue}
         onChange={x => {setPwdValue(x.target.value);}}

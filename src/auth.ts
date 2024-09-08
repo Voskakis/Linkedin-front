@@ -1,39 +1,31 @@
 import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { generate } from "password-hash"
-import { signInSchema } from "./lib/zod";
-import { ZodError } from "zod";
- 
+import CredentialsProvider from "next-auth/providers/credentials"
+import axios from 'axios';
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: '/signin',
+    signOut: '/signout',
+    error: '/error'
+  },
   providers: [
-    Credentials({
+    CredentialsProvider({
+      id: 'Credentials',
+      name: 'Credentials',
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
-        try {
-          let user= null;
-          const options = {
-            algorithm: 'sha256',
-            saltLength: 16,
-            iterations: 1000
-          };
-          const { email, password } = await signInSchema.parseAsync(credentials);
-          const pwHash = generate(password, options);
-          // user = await getUserFromDb(email, pwHash);
-          if (!user) {
-            throw new Error("User not found");
-          }
-          return user;
-        }
-        catch (error) {
-          if (error instanceof ZodError) {
-            return null;
-          }
-          throw error;
-        }
-      },
+      async authorize(credentials) {
+        const response = await axios.post(
+          'https://localhost:7164/api/Authenticate/Login', 
+          {
+            Email: credentials.email,
+            Password: credentials.password
+          },
+        );
+        return response.status == 200 ? response.data : null;
+      }
     }),
   ],
 })
