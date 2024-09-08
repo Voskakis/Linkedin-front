@@ -29,7 +29,6 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 # TODO
 
 * remove duplicate signin prompt
-* add signup option
 * implement unauthorized/authorized redirects
 
 # NOTES FOR FINAL README
