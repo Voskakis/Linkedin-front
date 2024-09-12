@@ -2,19 +2,63 @@
 
 import { emailValid } from "@/lib/validations";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment } from "@mui/material";
+import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, TextField } from "@mui/material";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignUp() {
 
+  const router = useRouter();
+  const [firstname, setFirstnameValue] = useState('');
+  const [lastname, setLastnameValue] = useState('');
+  const [telephone, setTelephone] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [pwdValue, setPwdValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  async function tryRegister() {
+    try {
+      const response = await axios.post('https://localhost:7164/api/Authenticate/Register', {
+        email: emailValue,
+        password: pwdValue,
+        firstName: firstname,
+        lastName: lastname,
+        phoneNumber: telephone
+      });
+      //TODO: add response token to callback
+      router.push('/main');
+    }
+    catch (error) {
+      //TODO: show error message
+    }
+  }
+
   return (
-    <FormControl required>
+    <FormControl required sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+      <TextField 
+        id='signup-form-firstname' 
+        type='text'
+        value={firstname}
+        label="First Name"
+        onChange={x => {setFirstnameValue(x.target.value);}}
+      />
+      <TextField 
+        id='signup-form-lastname' 
+        type='text'
+        value={lastname}
+        label="Last Name"
+        onChange={x => {setLastnameValue(x.target.value);}}
+      />
+      <TextField 
+        id='signup-form-phone' 
+        type='tel'
+        value={telephone}
+        label="Phone Number"
+        onChange={x => {setTelephone(x.target.value);}}
+      />
       {!emailValid(emailValue) && <FormHelperText>Please provide a valid email address.</FormHelperText>}
-      <Input 
+      <TextField 
         id='signup-form-email' 
         type='email'
         value={emailValue}
@@ -45,6 +89,7 @@ export default function SignUp() {
       <Button 
         disabled={!emailValid(emailValue)}
         variant="contained"
+        onClick={() => tryRegister()}
       >
         Sign in
       </Button>
