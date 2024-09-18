@@ -41,7 +41,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            {/* TODO: add header per user */}
           </Typography>
         </Toolbar>
       </AppBar>
