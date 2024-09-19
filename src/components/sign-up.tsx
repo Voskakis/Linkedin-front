@@ -18,6 +18,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   async function tryRegister() {
+    console.log(pwdValue);
     try {
       const response = await axios.post('https://localhost:7164/api/Authenticate/Register', {
         email: emailValue,
@@ -26,6 +27,7 @@ export default function SignUp() {
         lastName: lastname,
         phoneNumber: telephone
       });
+      console.log(response);
       //TODO: add response token to callback
       router.push('/main');
     }
