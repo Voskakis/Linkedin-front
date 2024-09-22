@@ -4,6 +4,7 @@ import { emailValid } from "@/lib/validations";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, TextField } from "@mui/material";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -18,21 +19,26 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   async function tryRegister() {
-    console.log(pwdValue);
     try {
-      const response = await axios.post('https://localhost:7164/api/Authenticate/Register', {
+      await axios.post('https://localhost:7164/api/Authenticate/Register', {
         email: emailValue,
         password: pwdValue,
         firstName: firstname,
         lastName: lastname,
         phoneNumber: telephone
       });
-      console.log(response);
       //TODO: add response token to callback
-      router.push('/main');
+      // router.push('/main');
+      const response = await signIn('Credentials', {
+        redirect: false, email: emailValue, password: pwdValue
+      });
+      if (response?.ok) {
+        router.push('/main');
+      }
     }
     catch (error) {
       //TODO: show error message
+      console.log(error);
     }
   }
 
@@ -93,7 +99,7 @@ export default function SignUp() {
         variant="contained"
         onClick={() => tryRegister()}
       >
-        Sign in
+        Register
       </Button>
   </FormControl>)
 }
