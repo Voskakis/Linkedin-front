@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt";
 import UserExtension from "./lib/ExtendedUser";
 import { AdapterUser } from "next-auth/adapters";
 import https from 'https';
+import {jwtDecode} from 'jwt-decode';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -29,12 +30,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           //TODO: generalize it to all axios requests
           const axiosInstance = axios.create({
             httpsAgent: new https.Agent({
-              rejectUnauthorized: false, // Ignore self-signed certificates
+              rejectUnauthorized: false,
             }),
           });
         try {
           const response = await axiosInstance.post(url, body);
-          return response.status == 200 ? response.data : null;
+          return response.status == 200 ? jwtDecode(response.data) as UserExtension & (User | null): null;
         }
         catch (error) {
           console.log(error);

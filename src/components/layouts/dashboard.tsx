@@ -10,11 +10,13 @@ import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
-  MoveToInbox as InboxIcon,
-  Mail as MailIcon,
+  ManageAccounts as ManageAccountsIcon,
+  Settings as SettingsIcon
 } from '@mui/icons-material';
 import DrawerContent from "../extensions/DrawerContent";
 import { useSession } from "next-auth/react";
+import router from "next/router";
+import { Url } from "next/dist/shared/lib/router/router";
 
 export default function PersistentDrawerLeft({ children }: Readonly<{
   children: React.ReactNode;
@@ -24,6 +26,21 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
   const { data: session } = useSession();
 
   const drawerWidth = 240;
+
+  //TODO: add all the possible routes that can be navigated from the side bar and their respective pages
+  const sideList: {
+    label: string;
+    adminOnly: boolean;
+    icon: JSX.Element;
+    route: Url;
+  }[] = [
+    {
+      label: 'Users',
+      adminOnly: true,
+      icon: <ManageAccountsIcon />,
+      route: '/users'
+    },
+  ]
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -45,8 +62,9 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            <p>Wlcome, {session?.FirstName} </p>
+            <p>Welcome, {`${session?.FirstName} ${session?.LastName}`}</p>
           </Typography>
+          <SettingsIcon />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -69,26 +87,13 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
+          {sideList.map((value, index) => (
+            <ListItem key={value.label} disablePadding>
+              <ListItemButton onClick={() => router.push(value.route)}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {value.icon}
                 </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={value.label} />
               </ListItemButton>
             </ListItem>
           ))}

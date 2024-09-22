@@ -13,10 +13,17 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   async function trySignIn() {
-    const response = await signIn('Credentials', {
-      email: emailValue,
-      password: pwdValue
-    });
+    try {
+      await signIn('Credentials', {
+        email: emailValue,
+        password: pwdValue,
+        redirect: true,
+        callbackUrl: '/main'
+      });
+    }
+    catch (error){
+      console.log(error);
+    }
   }
 
   return (

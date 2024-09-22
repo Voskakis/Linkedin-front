@@ -5,4 +5,5 @@ export default interface UserExtension {
   BioFileId?: number | null;
   PhotoFileId?: number | null;
   AccessToken?: string;
+  Email?: string;
 }
