@@ -1,8 +1,9 @@
-import NextAuth, { Session } from "next-auth"
+import NextAuth, { Session, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import axios from 'axios';
 import { JWT } from "next-auth/jwt";
-import ExtendedUser from "./lib/ExtendedUser";
+import UserExtension from "./lib/ExtendedUser";
+import { AdapterUser } from "next-auth/adapters";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -20,7 +21,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         const response = await axios.post(
-          'https://localhost:7164/api/Authenticate/Login', 
+          `${process.env.BACKEND_URL}/api/Authenticate/Login`, 
           {
             Email: credentials.email,
             Password: credentials.password
@@ -31,20 +32,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ token, user, session }: {
-      token: JWT;
-      user: ExtendedUser;
-      session: Session;
+    async jwt({ token, user }: {
+      token: JWT & UserExtension;
+      user: UserExtension & (User | AdapterUser);
     }) {
-      // TODO: check if session is expired
-      // TODO: get user id from token somehow
-      const result = await axios.get(`https://localhost:7164/users/${'id'}`);
-      if (result.status === 200) {
-        user.BioFileId = result.data.BioFileId;
-        user.FirstName = result.data.FirstName;
-        user.LastName = result.data.LastName;
-        user.PhoneNumber = result.data.PhoneNumber;
-        user.PhotoFileId = result.data.PhotoFileId;
+      if (user){
+        token.FirstName = user.FirstName;
+        token.LastName = user.LastName;
+        token.PhoneNumber = user.PhoneNumber;
+        token.BioFileId = user.BioFileId;
+        token.PhotoFileId = user.PhotoFileId;
+        token.AccessToken = user.AccessToken;
+      }
+      return token;
+    },
+    async session({ token, session }: {
+      token: JWT & UserExtension;
+      session: Session & UserExtension;
+    }) {
+      if (token){
+        session.FirstName = token.FirstName;
+        session.LastName = token.LastName;
+        session.PhoneNumber = token.PhoneNumber;
+        session.BioFileId = token.BioFileId;
+        session.PhotoFileId = token.PhotoFileId;
+        session.AccessToken = token.AccessToken;
       }
       return session;
     }
