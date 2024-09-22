@@ -27,8 +27,6 @@ export default function SignUp() {
         lastName: lastname,
         phoneNumber: telephone
       });
-      //TODO: add response token to callback
-      // router.push('/main');
       const response = await signIn('Credentials', {
         redirect: false, email: emailValue, password: pwdValue
       });

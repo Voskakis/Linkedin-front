@@ -14,12 +14,14 @@ import {
   Mail as MailIcon,
 } from '@mui/icons-material';
 import DrawerContent from "../extensions/DrawerContent";
+import { useSession } from "next-auth/react";
 
 export default function PersistentDrawerLeft({ children }: Readonly<{
   children: React.ReactNode;
 }>) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const { data: session } = useSession();
 
   const drawerWidth = 240;
 
@@ -43,7 +45,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {/* TODO: add header per user */}
+            <p>Wlcome, {session?.FirstName} </p>
           </Typography>
         </Toolbar>
       </AppBar>
