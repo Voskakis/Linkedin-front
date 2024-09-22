@@ -1,9 +1,9 @@
 'use client';
 
-import { signIn } from "@/auth"
 import { emailValid } from "@/lib/validations";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment } from "@mui/material";
+import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, TextField } from "@mui/material";
+import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 
 export default function SignIn() {
@@ -12,11 +12,18 @@ export default function SignIn() {
   const [pwdValue, setPwdValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  async function trySignIn() {
+    const response = await signIn('Credentials', {
+      email: emailValue,
+      password: pwdValue
+    });
+  }
+
   return (
     <FormControl required>
       {!emailValid(emailValue) && <FormHelperText>Please provide a valid email address.</FormHelperText>}
-      <Input 
-        id='signin-form-email' 
+      <TextField 
+        id='signup-form-email' 
         type='email'
         value={emailValue}
         onChange={x => {setEmailValue(x.target.value);}}
@@ -44,8 +51,9 @@ export default function SignIn() {
         }
       />
       <Button 
-        disabled={!emailValid(emailValue)}
+        // disabled={!emailValid(emailValue)}
         variant="contained"
+        onClick={() => trySignIn()}
       >
         Sign in
       </Button>

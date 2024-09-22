@@ -20,7 +20,7 @@ export default function SignUp() {
 
   async function tryRegister() {
     try {
-      await axios.post('https://localhost:7164/api/Authenticate/Register', {
+      const foo = await axios.post('https://localhost:7164/api/Authenticate/Register', {
         email: emailValue,
         password: pwdValue,
         firstName: firstname,
@@ -28,10 +28,15 @@ export default function SignUp() {
         phoneNumber: telephone
       });
       const response = await signIn('Credentials', {
-        redirect: false, email: emailValue, password: pwdValue
+        email: emailValue,
+        password: pwdValue
       });
       if (response?.ok) {
         router.push('/main');
+        router.refresh();
+      }
+      else {
+        router.push('/error');
       }
     }
     catch (error) {

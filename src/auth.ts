@@ -20,12 +20,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA', `${process.env.BACKEND_URL}/api/Authenticate/Login`);
         const response = await axios.post(
           `${process.env.BACKEND_URL}/api/Authenticate/Login`, 
           {
-            Email: credentials.email,
-            Password: credentials.password
+            email: credentials.email,
+            password: credentials.password
           },
+          { headers: {
+            'Content-Type': 'application/json', // Set content-type header to application/json
+          }},
         );
         return response.status == 200 ? response.data : null;
       },
