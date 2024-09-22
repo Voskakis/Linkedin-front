@@ -4,6 +4,7 @@ import axios from 'axios';
 import { JWT } from "next-auth/jwt";
 import UserExtension from "./lib/ExtendedUser";
 import { AdapterUser } from "next-auth/adapters";
+import https from 'https';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -20,18 +21,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA', `${process.env.BACKEND_URL}/api/Authenticate/Login`);
-        const response = await axios.post(
-          `${process.env.BACKEND_URL}/api/Authenticate/Login`, 
-          {
+        const url = `${process.env.BACKEND_URL}/api/Authenticate/Login`;
+        const body = {
             email: credentials.email,
             password: credentials.password
-          },
-          { headers: {
-            'Content-Type': 'application/json', // Set content-type header to application/json
-          }},
-        );
-        return response.status == 200 ? response.data : null;
+          };
+          //TODO: generalize it to all axios requests
+          const axiosInstance = axios.create({
+            httpsAgent: new https.Agent({
+              rejectUnauthorized: false, // Ignore self-signed certificates
+            }),
+          });
+        try {
+          const response = await axiosInstance.post(url, body);
+          return response.status == 200 ? response.data : null;
+        }
+        catch (error) {
+          console.log(error);
+        }
       },
     }),
   ],
