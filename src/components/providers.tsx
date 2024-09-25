@@ -2,6 +2,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/themes/default-theme';
 import { SessionProvider } from 'next-auth/react';
+import { PaginationProvider } from '@/lib/contexts/PaginationContext';
 
 const ProvidersWrapper = (
   { children }: Readonly<{
@@ -10,9 +11,11 @@ const ProvidersWrapper = (
   return (
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>
-        <SessionProvider>
-          {children}
-        </SessionProvider>  
+        <PaginationProvider>
+          <SessionProvider>
+            {children}
+          </SessionProvider>
+        </PaginationProvider>
       </ThemeProvider>
     </AppRouterCacheProvider>
   )
