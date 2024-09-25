@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { usePagination } from '@/lib/contexts/PaginationContext';
 
 export default function TableComponent({rows, columns, loading}: {rows: any[], columns: any[], loading: boolean}) {
-  const { paginationModel, pageSizeOptions, setPage, setPageSize} = usePagination();
+  const { paginationModel, pageSizeOptions} = usePagination();
   return (
     <Paper sx={{ height: 400, width: '100%' }}>
       <DataGrid
