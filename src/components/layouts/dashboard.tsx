@@ -1,6 +1,7 @@
 'use client'
 
 import { 
+  BottomNavigation,
   Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled, Toolbar, Typography, useTheme 
 } from "@mui/material";
 import React from "react";
@@ -17,6 +18,7 @@ import DrawerContent from "../extensions/DrawerContent";
 import { useSession } from "next-auth/react";
 import router from "next/router";
 import { Url } from "next/dist/shared/lib/router/router";
+import Chat from "../chat/Chat";
 
 export default function PersistentDrawerLeft({ children }: Readonly<{
   children: React.ReactNode;
@@ -103,6 +105,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
         <DrawerHeader />
         <main>{children}</main>
       </DrawerContent>
+      <Chat />
     </Box>
   );
 }
