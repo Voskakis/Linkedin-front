@@ -1,11 +1,11 @@
-import NextAuth, { Session, User } from "next-auth"
+import { Session, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import axios from 'axios';
 import { JWT } from "next-auth/jwt";
 import UserExtension from "./lib/ExtendedUser";
-import { AdapterUser } from "next-auth/adapters";
 import https from 'https';
 import {jwtDecode} from 'jwt-decode';
+import NextAuth from "../node_modules/next-auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         try {
           const response = await axiosInstance.post(url, body);
-          return response.status == 200 ? jwtDecode(response.data) as UserExtension & (User | null): null;
+          return response.status == 200 ? jwtDecode(response.data) : null;
         }
         catch (error) {
           console.log(error);
@@ -45,30 +45,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }: {
-      token: JWT & UserExtension;
-      user: UserExtension & (User | AdapterUser);
+      user: User,
+      token: JWT
     }) {
       if (user){
-        token.FirstName = user.FirstName;
-        token.LastName = user.LastName;
-        token.PhoneNumber = user.PhoneNumber;
-        token.BioFileId = user.BioFileId;
-        token.PhotoFileId = user.PhotoFileId;
-        token.AccessToken = user.AccessToken;
+        token.user.FirstName = user.FirstName;
+        token.user.LastName = user.LastName;
+        token.user.PhoneNumber = user.PhoneNumber;
+        token.user.BioFileId = user.BioFileId;
+        token.user.PhotoFileId = user.PhotoFileId;
+        token.user.AccessToken = user.AccessToken;
       }
       return token;
     },
     async session({ token, session }: {
-      token: JWT & UserExtension;
-      session: Session & UserExtension;
+      token: JWT;
+      session: Session;
     }) {
       if (token){
-        session.FirstName = token.FirstName;
-        session.LastName = token.LastName;
-        session.PhoneNumber = token.PhoneNumber;
-        session.BioFileId = token.BioFileId;
-        session.PhotoFileId = token.PhotoFileId;
-        session.AccessToken = token.AccessToken;
+        session.user.FirstName = token.FirstName;
+        session.user.LastName = token.LastName;
+        session.user.PhoneNumber = token.PhoneNumber;
+        session.user.BioFileId = token.BioFileId;
+        session.user.PhotoFileId = token.PhotoFileId;
+        session.user.AccessToken = token.AccessToken;
       }
       return session;
     }

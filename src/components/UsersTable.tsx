@@ -5,8 +5,8 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import Table from './Table';
 
-export function UsersTable() {
-  const { data: session } = useSession();
+export default function UsersTable() {
+  const { data, status } = useSession();
   const [rows, setRows] = useState<any[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,9 +15,10 @@ export function UsersTable() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://localhost:7164/users`, {
+        console.log(data)
+        const response = await axios.get(`https://localhost:7164/api/users`, {
           headers: {
-            Authorization: `Bearer ${session?.accessToken}`
+            Authorization: `Bearer ${data?.user.AccessToken}`
           }
         });
         const users = response.data;
@@ -34,7 +35,7 @@ export function UsersTable() {
     };
 
     fetchData();
-  }, [session?.accessToken]);
+  }, [data, data?.user.AccessToken]);
 
   return (
     <div>
