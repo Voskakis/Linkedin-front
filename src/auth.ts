@@ -2,10 +2,10 @@ import { Session, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import axios from 'axios';
 import { JWT } from "next-auth/jwt";
-import UserExtension from "./lib/ExtendedUser";
 import https from 'https';
 import {jwtDecode} from 'jwt-decode';
 import NextAuth from "../node_modules/next-auth";
+import { AdapterUser } from "next-auth/adapters";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -35,40 +35,50 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         try {
           const response = await axiosInstance.post(url, body);
-          return response.status == 200 ? jwtDecode(response.data) : null;
+          return response.status == 200 ? jwtDecode(response.data) as User : null;
         }
         catch (error) {
           console.log(error);
+          return null;
         }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }: {
-      user: User,
-      token: JWT
+      token: JWT;
+      user?: User | AdapterUser
     }) {
-      if (user){
-        token.user.FirstName = user.FirstName;
-        token.user.LastName = user.LastName;
-        token.user.PhoneNumber = user.PhoneNumber;
-        token.user.BioFileId = user.BioFileId;
-        token.user.PhotoFileId = user.PhotoFileId;
-        token.user.AccessToken = user.AccessToken;
+      if (user) {
+        const customUser = user as User & {
+          FirstName?: string;
+          LastName?: string;
+          PhoneNumber?: string;
+          BioFileId?: string;
+          PhotoFileId?: string;
+          AccessToken?: string;
+        };
+
+        token.FirstName = customUser.FirstName;
+        token.LastName = customUser.LastName;
+        token.PhoneNumber = customUser.PhoneNumber;
+        token.BioFileId = customUser.BioFileId;
+        token.PhotoFileId = customUser.PhotoFileId;
+        token.AccessToken = customUser.AccessToken;
       }
       return token;
     },
     async session({ token, session }: {
-      token: JWT;
       session: Session;
+      token: JWT;
     }) {
       if (token){
-        session.user.FirstName = token.FirstName;
-        session.user.LastName = token.LastName;
-        session.user.PhoneNumber = token.PhoneNumber;
-        session.user.BioFileId = token.BioFileId;
-        session.user.PhotoFileId = token.PhotoFileId;
-        session.user.AccessToken = token.AccessToken;
+        session.user.FirstName = token.FirstName as string;
+        session.user.LastName = token.LastName as string;
+        session.user.PhoneNumber = token.PhoneNumber as string;
+        session.user.BioFileId = token.BioFileId as string;
+        session.user.PhotoFileId = token.PhotoFileId as string;
+        session.user.AccessToken = token.AccessToken as string;
       }
       return session;
     }

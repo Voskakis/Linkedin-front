@@ -1,22 +1,18 @@
-// import { DefaultJWT } from 'next-auth/jwt';
-// import { DefaultSession, DefaultUser } from 'next-auth';
+import NextAuth, { DefaultSession } from 'next-auth';
 
-// declare module 'next-auth' {
-//   interface User {
-//     FirstName?: string;
-//     LastName?: string;
-//     PhoneNumber?: string;
-//     BioFileId?: number | null;
-//     PhotoFileId?: number | null;
-//     AccessToken?: string;
-//     Email?: string;
-//   }
+declare module 'next-auth' {
+  interface UserClaims {
+    FirstName: string;
+    LastName: string;
+    PhoneNumber: string;
+    BioFileId: string;
+    PhotoFileId: string;
+    AccessToken: string;
+  }
 
-//   interface Session {
-//     user: User & DefaultSession['user'];
-//   } 
+  interface Session {
+    user: UserClaims & DefaultSession["user"];
+  }
 
-//   interface JWT {
-//     user: User
-//   }
-// }
+  interface JWT extends UserClaims {}
+}

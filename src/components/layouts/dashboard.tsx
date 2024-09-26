@@ -64,7 +64,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            <p>Welcome, {`${session?.FirstName} ${session?.LastName}`}</p>
+            <p>Welcome, {`${session?.user.FirstName} ${session?.user.LastName}`}</p>
           </Typography>
           <SettingsIcon />
         </Toolbar>
