@@ -33,7 +33,7 @@ export default function Chat() {
         <Box sx={{
           position: 'fixed',
           bottom: 0,
-          right: 0,
+          right: '20px',
           width: '300px',
           height: '400px',
           backgroundColor: 'white',
