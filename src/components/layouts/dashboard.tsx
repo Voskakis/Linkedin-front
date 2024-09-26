@@ -1,8 +1,7 @@
 'use client'
 
 import { 
-  BottomNavigation,
-  Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled, Toolbar, Typography, useTheme 
+  Box, CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography, useTheme 
 } from "@mui/material";
 import React from "react";
 import AppBar from "../extensions/AppBar";
@@ -16,9 +15,8 @@ import {
 } from '@mui/icons-material';
 import DrawerContent from "../extensions/DrawerContent";
 import { useSession } from "next-auth/react";
-import router from "next/router";
-import { Url } from "next/dist/shared/lib/router/router";
 import Chat from "../chat/Chat";
+import SideBarNavigation from "../SideBarNavigation";
 
 export default function PersistentDrawerLeft({ children }: Readonly<{
   children: React.ReactNode;
@@ -34,7 +32,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
     label: string;
     adminOnly: boolean;
     icon: JSX.Element;
-    route: Url;
+    route: string;
   }[] = [
     {
       label: 'Users',
@@ -88,18 +86,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {sideList.map((value, index) => (
-            <ListItem key={value.label} disablePadding>
-              <ListItemButton onClick={() => router.push(value.route)}>
-                <ListItemIcon>
-                  {value.icon}
-                </ListItemIcon>
-                <ListItemText primary={value.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <SideBarNavigation sideList={sideList} />
       </Drawer>
       <DrawerContent open={open} drawerWidth={drawerWidth}>
         <DrawerHeader />
