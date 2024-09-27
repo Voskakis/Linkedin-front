@@ -78,7 +78,8 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
         <DrawerHeader />
         <main>{children}</main>
       </DrawerContent>
-      <Chat />
+      {/* TODO: comment out this to have chat */}
+      {/* <Chat />  */}
     </Box>
   );
 }

@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const { messages, sendMessage } = useSignalR('https://your-api-url/chatHub', (message: string) => {
+  const { messages, sendMessage } = useSignalR('https://localhost:7164/chatHub', (message: string) => {
     console.log('New message received: ', message);
   });
 

@@ -1,4 +1,4 @@
-import { Session, User } from "next-auth"
+import { Account, Session, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import axios from 'axios';
 import { JWT } from "next-auth/jwt";
@@ -35,7 +35,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         try {
           const response = await axiosInstance.post(url, body);
-          return response.status == 200 ? jwtDecode(response.data) as User : null;
+          if (response.status == 200) {
+            const decoded = jwtDecode(response.data) as any;
+            return {
+              LastName: decoded.LastName,
+              PhoneNumber: decoded.PhoneNumber,
+              BioFileId: decoded.BioFileId,
+              PhotoFileId: decoded.PhotoFileId,
+              AccessToken: response.data
+            };
+          }
+          return null;
         }
         catch (error) {
           console.log(error);
@@ -47,7 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }: {
       token: JWT;
-      user?: User | AdapterUser
+      user?: User | AdapterUser;
     }) {
       if (user) {
         const customUser = user as User & {
@@ -78,6 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.PhoneNumber = token.PhoneNumber as string;
         session.user.BioFileId = token.BioFileId as string;
         session.user.PhotoFileId = token.PhotoFileId as string;
+        session.user.AccessToken = token.AccessToken as string;
         session.user.AccessToken = token.AccessToken as string;
       }
       return session;
