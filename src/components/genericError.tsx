@@ -20,7 +20,7 @@ export default function GenericError() {
         boxShadow: '0 3px 10px rgba(0,0,0,0.2)',
         borderRadius: '12px',
         backgroundColor: 'white',
-        margin: 'auto', // Ensure it's centered vertically in the flexbox
+        margin: 'auto',
       }}
     >
       <Typography variant="h2" component="h1" gutterBottom color="error">
