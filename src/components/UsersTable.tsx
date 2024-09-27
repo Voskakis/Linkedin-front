@@ -6,6 +6,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useSession } from 'next-auth/react';
 import { TextField, Box, IconButton } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useRouter } from 'next/navigation';
 
 export default function UsersTable() {
   const { data: session, status } = useSession();
@@ -14,6 +15,7 @@ export default function UsersTable() {
   const [loading, setLoading] = useState(true);
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -67,7 +69,7 @@ export default function UsersTable() {
       renderCell: (params) => (
         <IconButton
           color="secondary"
-          onClick={() => handleEditClick(params.row.id)}
+          onClick={() => router.push(`/main/users/${params.row.id}`)}
         >
           <SettingsIcon />
         </IconButton>
