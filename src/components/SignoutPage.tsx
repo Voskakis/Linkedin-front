@@ -26,7 +26,7 @@ const SignoutPage = () => {
       </Typography>
         <Button
             variant="outlined"
-            color="secondary"
+            color="primary"
             onClick={() => router.push('/')}
         >
             Go to Homepage

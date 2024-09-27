@@ -4,23 +4,20 @@ import {
   Box, CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography, useTheme 
 } from "@mui/material";
 import React from "react";
-import AppBar from "../../components/extensions/AppBar";
-import DrawerHeader from "../../components/extensions/DrawerHeader";
+import AppBar from "@/components/extensions/AppBar";
+import DrawerHeader from "@/components/extensions/DrawerHeader";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  Settings as SettingsIcon
+  ChevronRight as ChevronRightIcon
 } from '@mui/icons-material';
-import DrawerContent from "../../components/extensions/DrawerContent";
+import DrawerContent from "@/components/extensions/DrawerContent";
 import { useSession } from "next-auth/react";
-import Chat from "../../components/chat/Chat";
-import SideBarNavigation from "../../components/SideBarNavigation";
-import {sideList, adminSideList} from "./SideList"
+import SideBarNavigation from "@/components/SideBarNavigation";
+import { sideList, adminSideList } from "./SideList";
+import AvatarButton from "@/components/AvatarButton";
 
-export default function PersistentDrawerLeft({ children }: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function PersistentDrawerLeft({ children }: Readonly<{ children: React.ReactNode; }>) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { data: session } = useSession();
@@ -46,9 +43,10 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            <p>Welcome, {`${session?.user.FirstName} ${session?.user.LastName}`}</p>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            <p>Welcome, {`${session?.user?.FirstName} ${session?.user?.LastName}`}</p>
           </Typography>
+          <AvatarButton />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -78,7 +76,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
         <main>{children}</main>
       </DrawerContent>
       {/* TODO: comment out this to have chat */}
-      {/* <Chat />  */}
+      {/* <Chat /> */}
     </Box>
   );
 }
