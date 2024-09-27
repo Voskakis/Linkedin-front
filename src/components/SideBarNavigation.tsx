@@ -1,17 +1,13 @@
 'use client'
 
+import SideListElement from "@/lib/interfaces/SideListElement";
 import { 
   List, ListItem, ListItemButton, ListItemIcon, ListItemText
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function SideBarNavigation({ sideList }: {
-  sideList: {
-    label: string;
-    adminOnly: boolean;
-    icon: JSX.Element;
-    route: string;
-  }[]
+  sideList: SideListElement[]
 }) {
   const router = useRouter();
   return (

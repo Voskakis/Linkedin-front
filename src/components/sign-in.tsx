@@ -18,7 +18,7 @@ export default function SignIn() {
         email: emailValue,
         password: pwdValue,
         redirect: true,
-        callbackUrl: '/main'
+        callbackUrl: '/main/feed'
       });
     }
     catch (error){

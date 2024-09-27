@@ -4,19 +4,19 @@ import {
   Box, CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography, useTheme 
 } from "@mui/material";
 import React from "react";
-import AppBar from "../extensions/AppBar";
-import DrawerHeader from "../extensions/DrawerHeader";
+import AppBar from "../../components/extensions/AppBar";
+import DrawerHeader from "../../components/extensions/DrawerHeader";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
-  ManageAccounts as ManageAccountsIcon,
   Settings as SettingsIcon
 } from '@mui/icons-material';
-import DrawerContent from "../extensions/DrawerContent";
+import DrawerContent from "../../components/extensions/DrawerContent";
 import { useSession } from "next-auth/react";
-import Chat from "../chat/Chat";
-import SideBarNavigation from "../SideBarNavigation";
+import Chat from "../../components/chat/Chat";
+import SideBarNavigation from "../../components/SideBarNavigation";
+import {sideList, adminSideList} from "./SideList"
 
 export default function PersistentDrawerLeft({ children }: Readonly<{
   children: React.ReactNode;
@@ -26,21 +26,6 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
   const { data: session } = useSession();
 
   const drawerWidth = 240;
-
-  //TODO: add all the possible routes that can be navigated from the side bar and their respective pages
-  const sideList: {
-    label: string;
-    adminOnly: boolean;
-    icon: JSX.Element;
-    route: string;
-  }[] = [
-    {
-      label: 'Users',
-      adminOnly: true,
-      icon: <ManageAccountsIcon />,
-      route: '/users'
-    },
-  ]
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -85,6 +70,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
+        <SideBarNavigation sideList={adminSideList} />
         <Divider />
         <SideBarNavigation sideList={sideList} />
       </Drawer>
