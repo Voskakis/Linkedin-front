@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useSession } from 'next-auth/react';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, IconButton } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export default function UsersTable() {
   const { data: session, status } = useSession();
@@ -47,12 +48,31 @@ export default function UsersTable() {
     setFilteredUsers(filtered);
   }, [searchQuery, users]);
 
+  const handleEditClick = (id: number) => {
+    console.log(`Edit user with ID: ${id}`);
+  };
+
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', flex: 1, minWidth: 50 },
     { field: 'firstName', headerName: 'First Name', flex: 1, minWidth: 100 },
     { field: 'lastName', headerName: 'Last Name', flex: 1, minWidth: 100 },
     { field: 'phoneNumber', headerName: 'Phone Number', flex: 1, minWidth: 150 },
     { field: 'email', headerName: 'Email', flex: 1, minWidth: 200 },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      flex: 1,
+      minWidth: 100,
+      sortable: false,
+      renderCell: (params) => (
+        <IconButton
+          color="secondary"
+          onClick={() => handleEditClick(params.row.id)}
+        >
+          <SettingsIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   if (status === 'loading') {
