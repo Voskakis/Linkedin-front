@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { 
   Box, CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography, useTheme 
@@ -23,10 +23,12 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
   const { data: session } = useSession();
 
   const drawerWidth = 240;
+  const appBarHeight = 64; // Assuming AppBar height is 64px (adjust as needed)
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
+      {/* AppBar */}
       <AppBar position="fixed" open={open} drawerWidth={drawerWidth}>
         <Toolbar>
           <IconButton
@@ -35,20 +37,20 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
             onClick={() => setOpen(true)}
             edge="start"
             sx={[
-              {
-                mr: 2,
-              },
+              { mr: 2 },
               open && { display: 'none' },
             ]}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            <p>Welcome, {`${session?.user?.FirstName} ${session?.user?.LastName}`}</p>
+            Welcome, {`${session?.user?.FirstName} ${session?.user?.LastName}`}
           </Typography>
           <AvatarButton />
         </Toolbar>
       </AppBar>
+
+      {/* Drawer */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -71,12 +73,24 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
         <Divider />
         <SideBarNavigation sideList={sideList} />
       </Drawer>
+
+      {/* Main Content */}
       <DrawerContent open={open} drawerWidth={drawerWidth}>
         <DrawerHeader />
-        <main>{children}</main>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '24px', // Adjust padding here if needed
+            minHeight: `calc(100vh - ${appBarHeight}px)`, // Adjust based on AppBar height
+            overflow: 'auto', // Ensure content can scroll if necessary
+          }}
+        >
+          {children}
+        </Box>
       </DrawerContent>
-      {/* TODO: comment out this to have chat */}
-      {/* <Chat /> */}
     </Box>
   );
 }

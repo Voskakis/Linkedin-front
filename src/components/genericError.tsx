@@ -14,23 +14,31 @@ export default function GenericError() {
       justifyContent="center"
       alignItems="center"
       textAlign="center"
+      sx={{
+        maxWidth: 600,
+        padding: '24px',
+        boxShadow: '0 3px 10px rgba(0,0,0,0.2)',
+        borderRadius: '12px',
+        backgroundColor: 'white',
+        margin: 'auto', // Ensure it's centered vertically in the flexbox
+      }}
     >
-      <Typography variant="h2" component="h1" gutterBottom>
+      <Typography variant="h2" component="h1" gutterBottom color="error">
         Oops! Something went wrong.
       </Typography>
       <Typography variant="body1" gutterBottom>
         We&apos;re sorry, but an unexpected error has occurred. 
         Please try refreshing the page or return to the homepage.
       </Typography>
-      <Typography variant="body2" gutterBottom>
-      </Typography>
       <Button
         variant="contained"
         color="primary"
+        size="large"
+        sx={{ marginTop: '16px' }}
         onClick={() => router.push('/')}
       >
         Go to Homepage
       </Button>
     </Box>
   );
-};
+}
