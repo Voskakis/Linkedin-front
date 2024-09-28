@@ -17,10 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <ProvidersWrapper>
-          {/* Main Content Area */}
           <div className="flex-grow">{children}</div>
-
-          {/* Footer Watermark */}
           <footer className="text-center text-gray-500 opacity-75 text-sm py-4">
             Created by Konstantinos Voskakis & Konstantinos Mavraidis
           </footer>

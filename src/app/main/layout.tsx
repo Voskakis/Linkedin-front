@@ -23,12 +23,10 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
   const { data: session } = useSession();
 
   const drawerWidth = 240;
-  const appBarHeight = 64; // Assuming AppBar height is 64px (adjust as needed)
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      {/* AppBar */}
       <AppBar position="fixed" open={open} drawerWidth={drawerWidth}>
         <Toolbar>
           <IconButton
@@ -74,7 +72,6 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
         <SideBarNavigation sideList={sideList} />
       </Drawer>
 
-      {/* Main Content */}
       <DrawerContent open={open} drawerWidth={drawerWidth}>
         <DrawerHeader />
         <Box
@@ -83,9 +80,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
-            padding: '24px', // Adjust padding here if needed
-            minHeight: `calc(100vh - ${appBarHeight}px)`, // Adjust based on AppBar height
-            overflow: 'auto', // Ensure content can scroll if necessary
+            overflow: 'auto',
           }}
         >
           {children}

@@ -50,21 +50,16 @@ export default function UsersTable() {
     setFilteredUsers(filtered);
   }, [searchQuery, users]);
 
-  const handleEditClick = (id: number) => {
-    console.log(`Edit user with ID: ${id}`);
-  };
-
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', flex: 1, minWidth: 50 },
-    { field: 'firstName', headerName: 'First Name', flex: 1, minWidth: 100 },
-    { field: 'lastName', headerName: 'Last Name', flex: 1, minWidth: 100 },
-    { field: 'phoneNumber', headerName: 'Phone Number', flex: 1, minWidth: 150 },
-    { field: 'email', headerName: 'Email', flex: 1, minWidth: 200 },
+    { field: 'id', headerName: 'ID', flex: 1 },
+    { field: 'firstName', headerName: 'First Name', flex: 1 },
+    { field: 'lastName', headerName: 'Last Name', flex: 1 },
+    { field: 'phoneNumber', headerName: 'Phone Number', flex: 1 },
+    { field: 'email', headerName: 'Email', flex: 1 },
     {
       field: 'actions',
       headerName: 'Actions',
       flex: 1,
-      minWidth: 100,
       sortable: false,
       renderCell: (params) => (
         <IconButton
@@ -86,7 +81,7 @@ export default function UsersTable() {
   }
 
   return (
-    <div style={{ height: 500, width: '100%' }}>
+    <div style={{ width: '100%' }}>
       <Box sx={{ mb: 2 }}>
         <TextField
           fullWidth
