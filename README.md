@@ -63,9 +63,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 # TODO
 
-* remove duplicate signin prompt
 * implement unauthorized/authorized redirects
-* remove logs and use the error handling instead
 
 # NOTES FOR FINAL README
 
