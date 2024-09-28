@@ -30,7 +30,7 @@ export default function SignUp() {
       router.push('/signin');
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        setErrorMessage(error.response?.data?.message || 'An error occurred during registration. Please try again.');
+        setErrorMessage(error.response?.data || 'An error occurred during registration. Please try again.');
       } else if (error instanceof Error) {
         setErrorMessage(error.message || 'An unknown error occurred.');
       } else {
