@@ -42,7 +42,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Welcome, {`${session?.user?.FirstName} ${session?.user?.LastName}`}
+            Welcome, {`${session?.user.FirstName} ${session?.user.LastName}`}
           </Typography>
           <AvatarButton />
         </Toolbar>
@@ -66,7 +66,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
           </IconButton>
         </DrawerHeader>
         {/* TODO: change below to actualy check the role if it is admin */}
-        {session?.user.email?.toLowerCase() === 'admin@example.com' && (
+        {session?.user.LastName.toLowerCase() === 'admin' && (
           <>
             <SideBarNavigation sideList={adminSideList} />
             <Divider />
