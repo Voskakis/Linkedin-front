@@ -14,28 +14,11 @@ export default function UserMenu({ onSignOut }: {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSignOut = async () => {
-    handleMenuClose();
-    if (onSignOut) {
-      onSignOut();
-    } else {
-      await signOut({ callbackUrl: '/signout' });
-    }
-  };
-
   return (
     <>
       <IconButton
         color="inherit"
-        onClick={handleMenuOpen}
+        onClick={(event) => setAnchorEl(event.currentTarget)}
         sx={{
           backgroundColor: openMenu ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
           borderRadius: openMenu ? '8px' : '50%',
@@ -51,7 +34,7 @@ export default function UserMenu({ onSignOut }: {
       <Menu
         anchorEl={anchorEl}
         open={openMenu}
-        onClose={handleMenuClose}
+        onClose={() => setAnchorEl(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         TransitionComponent={Grow}
@@ -68,14 +51,24 @@ export default function UserMenu({ onSignOut }: {
           },
         }}
       >
-        <MenuItem onClick={handleMenuClose}>Personal Information</MenuItem>
+        <MenuItem onClick={() => {
+          setAnchorEl(null);
+          router.push('/main/personalinformation');
+        }}>Personal Information</MenuItem>
         
         <MenuItem onClick={() => {
-          handleMenuClose();
+          setAnchorEl(null);
           router.push('/main/settings');
         }}>Settings</MenuItem>
         
-        <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
+        <MenuItem onClick={async () => {
+          setAnchorEl(null);
+          if (onSignOut) {
+            onSignOut();
+          } else {
+            await signOut({ callbackUrl: '/signout' });
+          }
+        }}>Sign Out</MenuItem>
       </Menu>
     </>
   );
