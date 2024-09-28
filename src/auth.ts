@@ -39,10 +39,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const decoded = jwtDecode(response.data) as any;
             return {
               LastName: decoded.LastName,
+              FirstName: decoded.FirstName,
               PhoneNumber: decoded.PhoneNumber,
               BioFileId: decoded.BioFileId,
               PhotoFileId: decoded.PhotoFileId,
-              AccessToken: response.data
+              AccessToken: response.data,
+              AdminUser: decoded.AdminUser
             };
           }
           return null;
@@ -67,6 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           BioFileId?: string;
           PhotoFileId?: string;
           AccessToken?: string;
+          AdminUser?: string;
         };
 
         token.FirstName = customUser.FirstName;
@@ -75,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.BioFileId = customUser.BioFileId;
         token.PhotoFileId = customUser.PhotoFileId;
         token.AccessToken = customUser.AccessToken;
+        token.AdminUser = customUser.AdminUser;
       }
       return token;
     },
@@ -90,6 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.PhotoFileId = token.PhotoFileId as string;
         session.user.AccessToken = token.AccessToken as string;
         session.user.AccessToken = token.AccessToken as string;
+        session.user.AdminUser = token.AdminUser as string;
       }
       return session;
     }

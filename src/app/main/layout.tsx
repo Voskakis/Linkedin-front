@@ -21,6 +21,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { data: session } = useSession();
+  console.log('Hippity Hoppety', session);
 
   const drawerWidth = 240;
 
@@ -65,8 +66,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
-        {/* TODO: change below to actualy check the role if it is admin */}
-        {session?.user.LastName.toLowerCase() === 'admin' && (
+        {session?.user?.AdminUser && session.user.AdminUser === 'true' && (
           <>
             <SideBarNavigation sideList={adminSideList} />
             <Divider />

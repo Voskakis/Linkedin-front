@@ -8,6 +8,7 @@ declare module 'next-auth' {
     BioFileId: string;
     PhotoFileId: string;
     AccessToken: string;
+    AdminUser: string;
   }
 
   interface Session {
