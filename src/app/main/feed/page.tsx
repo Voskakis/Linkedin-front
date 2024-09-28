@@ -1,7 +1,7 @@
 
-export default async function MainPage() {
+export default async function FeedPage() {
   return (
-    <div  className="flex min-h-screen flex-col items-center justify-between p-24">
+    <div  className="flex flex-col items-center justify-between p-24">
       feed placeholder
     </div>
   );
