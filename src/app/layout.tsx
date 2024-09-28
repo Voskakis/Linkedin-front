@@ -21,7 +21,7 @@ export default function RootLayout({
           <div className="flex-grow">{children}</div>
 
           {/* Footer Watermark */}
-          <footer className="mt-auto text-center text-gray-500 opacity-75 text-sm py-4">
+          <footer className="text-center text-gray-500 opacity-75 text-sm py-4">
             Created by Konstantinos Voskakis & Konstantinos Mavraidis
           </footer>
         </ProvidersWrapper>
