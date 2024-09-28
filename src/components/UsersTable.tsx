@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useSession } from 'next-auth/react';
-import { TextField, Box, IconButton } from '@mui/material';
+import { TextField, Box, Button, IconButton } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useRouter } from 'next/navigation';
+import ExportDialog from './ExportFileDialog';
 
 export default function UsersTable() {
   const { data: session, status } = useSession();
@@ -15,6 +16,8 @@ export default function UsersTable() {
   const [loading, setLoading] = useState(true);
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -71,15 +74,12 @@ export default function UsersTable() {
       ),
     },
   ];
-
   if (status === 'loading') {
     return <p>Loading session...</p>;
   }
-
   if (status === 'unauthenticated') {
     return <p>Please sign in to view the users.</p>;
   }
-
   return (
     <div style={{ width: '100%' }}>
       <Box sx={{ mb: 2 }}>
@@ -91,6 +91,16 @@ export default function UsersTable() {
           onChange={e => setSearchQuery(e.target.value)}
         />
       </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setExportDialogOpen(true)}
+          disabled={selectedUserIds.length === 0}
+        >
+          Export Selected
+        </Button>
+      </Box>
       <DataGrid
         rows={filteredUsers}
         columns={columns}
@@ -99,6 +109,17 @@ export default function UsersTable() {
         autoHeight
         onRowSelectionModelChange={x => setSelectedUserIds(x as number[])}
         disableColumnResize={false}
+      />
+      <ExportDialog
+        open={exportDialogOpen}
+        onClose={() => setExportDialogOpen(false)}
+        onExport={(exportType: string, selectedCategories: any) => {
+          //TODO
+          const selectedUsersData = users.filter(user => selectedUserIds.includes(user.id));
+          console.log('Selected export type:', exportType);
+          console.log('Selected categories:', selectedCategories);
+          console.log('Selected users data:', selectedUsersData);
+        }}
       />
     </div>
   );
