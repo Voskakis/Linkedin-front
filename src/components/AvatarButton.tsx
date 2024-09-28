@@ -1,14 +1,15 @@
+'use client'
+
 import { Avatar, IconButton, Menu, MenuItem, Grow } from "@mui/material";
 import React, { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Person as PersonIcon } from '@mui/icons-material';
+import { useRouter } from "next/navigation";
 
-interface UserMenuProps {
+export default function UserMenu({ onSignOut }: {
   onSignOut?: () => void;
-  additionalMenuItems?: React.ReactNode;
-}
-
-const UserMenu: React.FC<UserMenuProps> = ({ onSignOut, additionalMenuItems }) => {
+}) {
+  const router = useRouter();
   const { data: session } = useSession();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
@@ -67,12 +68,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ onSignOut, additionalMenuItems }) =
           },
         }}
       >
-        <MenuItem onClick={handleMenuClose}>See Profile</MenuItem>
-        {additionalMenuItems}
+        <MenuItem onClick={handleMenuClose}>Personal Information</MenuItem>
+        
+        <MenuItem onClick={() => {
+          handleMenuClose();
+          router.push('/main/settings');
+        }}>Settings</MenuItem>
+        
         <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
       </Menu>
     </>
   );
 };
-
-export default UserMenu;
