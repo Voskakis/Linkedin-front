@@ -1,12 +1,11 @@
-'use client';
+'use client'
 
+import React, { useState } from "react";
 import { emailValid } from "@/lib/validations";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, FormControl, FormHelperText, IconButton, Input, InputAdornment, TextField, Box, Typography, Stack } from "@mui/material";
+import { Button, IconButton, InputAdornment, TextField, Box, Typography, Stack, Alert } from "@mui/material";
 import axios from "axios";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 
 export default function SignUp() {
   const router = useRouter();
@@ -16,8 +15,10 @@ export default function SignUp() {
   const [emailValue, setEmailValue] = useState('');
   const [pwdValue, setPwdValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   async function tryRegister() {
+    setErrorMessage('');
     try {
       await axios.post('https://localhost:7164/api/Authenticate/Register', {
         email: emailValue,
@@ -26,19 +27,15 @@ export default function SignUp() {
         lastName: lastname,
         phoneNumber: telephone
       });
-      const response = await signIn('Credentials', {
-        email: emailValue,
-        password: pwdValue
-      });
-      if (response?.ok) {
-        router.push('/main');
-        router.refresh();
+      router.push('/signin');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data?.message || 'An error occurred during registration. Please try again.');
+      } else if (error instanceof Error) {
+        setErrorMessage(error.message || 'An unknown error occurred.');
       } else {
-        router.push('/error');
+        setErrorMessage('An unknown error occurred.');
       }
-    } catch (error) {
-      console.log(error);
-      // TODO: handle error
     }
   }
 
@@ -56,6 +53,11 @@ export default function SignUp() {
       <Typography variant="h4" component="h1" gutterBottom textAlign="center">
         Create an Account
       </Typography>
+      {errorMessage && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {errorMessage}
+        </Alert>
+      )}
       <Stack spacing={2}>
         <TextField 
           id='signup-form-firstname' 
