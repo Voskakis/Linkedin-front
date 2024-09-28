@@ -5,7 +5,7 @@ let connection: signalR.HubConnection | null = null;
 
 const createConnection = (hubUrl: string) => {
   return new signalR.HubConnectionBuilder()
-    .withUrl(hubUrl) //TODO: add backend url
+    .withUrl(hubUrl)
     .withAutomaticReconnect()
     .configureLogging(signalR.LogLevel.Error)
     .build();

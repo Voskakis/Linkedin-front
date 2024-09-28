@@ -11,25 +11,21 @@ import CloseIcon from '@mui/icons-material/Close';
 export default function Chat() {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const { messages, sendMessage } = useSignalR('https://localhost:7164/chatHub', (message: string) => {
+  const { messages, sendMessage } = useSignalR('wss://localhost:7164/chat-hub', (message: string) => {
     console.log('New message received: ', message);
   });
-
-  const toggleChat = () => {
-    setIsChatOpen(!isChatOpen);
-  };
 
   return (
     <div>
       <Fab 
         color="primary" 
         aria-label="chat" 
-        onClick={toggleChat} 
+        onClick={() => setIsChatOpen(!isChatOpen)} 
         style={{ position: 'fixed', bottom: 20, right: 20 }}>
         <ChatIcon />
       </Fab>
 
-      <Modal open={isChatOpen} onClose={toggleChat}>
+      <Modal open={isChatOpen} onClose={() => setIsChatOpen(!isChatOpen)}>
         <Box sx={{
           position: 'fixed',
           bottom: 0,
@@ -46,7 +42,7 @@ export default function Chat() {
         }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3>Chat</h3>
-            <IconButton onClick={toggleChat}>
+            <IconButton onClick={() => setIsChatOpen(!isChatOpen)}>
               <CloseIcon />
             </IconButton>
           </Box>

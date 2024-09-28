@@ -16,12 +16,12 @@ import { useSession } from "next-auth/react";
 import SideBarNavigation from "@/components/SideBarNavigation";
 import { sideList, adminSideList } from "./SideList";
 import AvatarButton from "@/components/AvatarButton";
+import Chat from "@/components/chat/Chat";
 
 export default function PersistentDrawerLeft({ children }: Readonly<{ children: React.ReactNode; }>) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { data: session } = useSession();
-  console.log('Hippity Hoppety', session);
 
   const drawerWidth = 240;
 
@@ -89,6 +89,7 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
           {children}
         </Box>
       </DrawerContent>
+      {/* <Chat /> */}
     </Box>
   );
 }
