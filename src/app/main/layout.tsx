@@ -47,8 +47,6 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
           <AvatarButton />
         </Toolbar>
       </AppBar>
-
-      {/* Drawer */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -67,8 +65,13 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
-        <SideBarNavigation sideList={adminSideList} />
-        <Divider />
+        {/* TODO: change below to actualy check the role if it is admin */}
+        {session?.user.email?.toLowerCase() === 'admin@example.com' && (
+          <>
+            <SideBarNavigation sideList={adminSideList} />
+            <Divider />
+          </>
+        )}
         <SideBarNavigation sideList={sideList} />
       </Drawer>
 
