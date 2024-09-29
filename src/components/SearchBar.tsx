@@ -11,10 +11,11 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { jwtDecode } from "jwt-decode";
 
 interface SearchResult {
   id: string;
-  fullname: string;
+  fullName: string;
   email: string;
 }
 
@@ -30,7 +31,7 @@ export default function SearchBar() {
       const fetchResults = async () => {
         try {
           const response = await axios.get(
-            `https://localhost:7164/api/users/SearchUsersByName/${query}`,
+            `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/SearchUsersByName/${query}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.AccessToken}`,
@@ -102,7 +103,7 @@ export default function SearchBar() {
                 }}
               >
                 <ListItemText
-                  primary={result.fullname}
+                  primary={result.fullName}
                   secondary={result.email}
                   primaryTypographyProps={{ style: { color: "black" } }}
                   secondaryTypographyProps={{ style: { color: "black" } }}
