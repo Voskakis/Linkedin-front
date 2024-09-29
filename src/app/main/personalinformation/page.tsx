@@ -1,7 +1,9 @@
+import PersonalInformation from "@/components/user/PersonalInformation";
+
 export default async function PersonalInformationPage() {
     return (
-      <div  className="flex flex-col items-center justify-between p-24">
-        personal information placeholder
+      <div  className="flex flex-col items-center justify-between">
+        <PersonalInformation />
       </div>
     );
   }
