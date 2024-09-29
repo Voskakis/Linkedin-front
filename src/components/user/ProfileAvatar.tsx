@@ -48,7 +48,6 @@ export default function ProfileAvatar({
             );
             if (response.status === 200) {
               setPic(response.data);
-              console.log(response.data);
             }
           } catch (error) {
             console.error("Error uploading photo:", error);

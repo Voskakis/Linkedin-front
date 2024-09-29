@@ -66,9 +66,16 @@ export default function ProfilePage() {
 
   const handleDownloadCV = async () => {
     try {
-      const response = await axios.get(`/api/cv/${bioFileId}`, {
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/${bioFileId}`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${session?.user?.AccessToken}`,
+          },
+          responseType: "blob",
+        }
+      );
       const blob = new Blob([response.data], { type: "application/pdf" });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
@@ -85,9 +92,16 @@ export default function ProfilePage() {
       formData.append("file", e.target.files[0]);
 
       try {
-        await axios.post(`/api/cv/upload`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.post(
+          `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/UploadBio`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${session?.user?.AccessToken}`,
+            },
+          }
+        );
         alert("CV uploaded successfully!");
       } catch (error) {
         console.error("Error uploading CV:", error);
@@ -102,11 +116,15 @@ export default function ProfilePage() {
   return (
     <Box padding={3}>
       <Grid container spacing={4}>
-        <Grid item xs={12} md={4} container direction="column" alignItems="center">
-          <ProfileAvatar
-            photo={photo}
-            userId={user.id}
-          />
+        <Grid
+          item
+          xs={12}
+          md={4}
+          container
+          direction="column"
+          alignItems="center"
+        >
+          <ProfileAvatar photo={photo} userId={user.id} />
         </Grid>
         <Grid item xs={12} md={8}>
           <ProfileDetails
