@@ -94,7 +94,7 @@ export default function SearchBar() {
               <ListItemButton
                 key={result.id}
                 onClick={() => {
-                  router.push(`/main/users/${result.id}`);
+                  router.push(`/main/nonadminusers/${result.id}`);
                   setQuery("");
                   setOpen(false);
                 }}
