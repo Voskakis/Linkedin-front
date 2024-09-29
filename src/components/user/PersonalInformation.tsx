@@ -141,8 +141,6 @@ export default function ProfilePage() {
         <Grid item xs={12}>
           <CVManagement
             bioFileId={bioFileId}
-            handleDownloadCV={handleDownloadCV}
-            handleUploadCV={handleUploadCV}
           />
         </Grid>
       </Grid>
