@@ -1,7 +1,14 @@
-'use client';
+"use client";
 
-import { 
-  Box, CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography, useTheme 
+import {
+  Box,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import AppBar from "@/components/extensions/AppBar";
@@ -9,16 +16,18 @@ import DrawerHeader from "@/components/extensions/DrawerHeader";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon
-} from '@mui/icons-material';
+  ChevronRight as ChevronRightIcon,
+} from "@mui/icons-material";
 import DrawerContent from "@/components/extensions/DrawerContent";
 import { useSession } from "next-auth/react";
 import SideBarNavigation from "@/components/SideBarNavigation";
 import { sideList, adminSideList } from "./SideList";
 import AvatarButton from "@/components/AvatarButton";
-import Chat from "@/components/chat/Chat";
+import SearchBar from "@/components/SearchBar";
 
-export default function PersistentDrawerLeft({ children }: Readonly<{ children: React.ReactNode; }>) {
+export default function PersistentDrawerLeft({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { data: session } = useSession();
@@ -26,35 +35,41 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
   const drawerWidth = 240;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} drawerWidth={drawerWidth}>
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={() => setOpen(true)}
             edge="start"
-            sx={[
-              { mr: 2 },
-              open && { display: 'none' },
-            ]}
+            sx={[{ mr: 2 }, open && { display: "none" }]}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Welcome, {`${session?.user.FirstName} ${session?.user.LastName}`}
-          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
+            <SearchBar />
+          </Box>
+
           <AvatarButton />
         </Toolbar>
       </AppBar>
+
       <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
         variant="persistent"
@@ -63,10 +78,14 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
       >
         <DrawerHeader>
           <IconButton onClick={() => setOpen(false)}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </DrawerHeader>
-        {session?.user?.AdminUser && session.user.AdminUser === 'true' && (
+        {session?.user?.AdminUser && session.user.AdminUser === "true" && (
           <>
             <SideBarNavigation sideList={adminSideList} />
             <Divider />
@@ -81,15 +100,14 @@ export default function PersistentDrawerLeft({ children }: Readonly<{ children: 
           component="main"
           sx={{
             flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'auto',
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto",
           }}
         >
           {children}
         </Box>
       </DrawerContent>
-      {/* <Chat /> */}
     </Box>
   );
 }
