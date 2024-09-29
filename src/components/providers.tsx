@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/themes/default-theme';
 import { SessionProvider } from 'next-auth/react';
 import { PaginationProvider } from '@/lib/contexts/PaginationContext';
+import { ChatProvider } from '@/lib/contexts/ChatContext';
 
 const ProvidersWrapper = (
   { children }: Readonly<{
@@ -13,7 +14,9 @@ const ProvidersWrapper = (
       <ThemeProvider theme={theme}>
         <PaginationProvider>
           <SessionProvider>
-            {children}
+            <ChatProvider>
+              {children}
+            </ChatProvider>
           </SessionProvider>
         </PaginationProvider>
       </ThemeProvider>
