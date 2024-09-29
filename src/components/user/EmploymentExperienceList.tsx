@@ -1,18 +1,17 @@
 "use client";
-
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 
 export default function EmploymentExperienceList({
   experiences,
+  isEditable,
 }: {
   experiences: {
     company: string;
-    companyId?: number;
     position: string;
-    positionId?: number;
     startDate: string;
     endDate?: string;
   }[];
+  isEditable: boolean;
 }) {
   return (
     <Box>
@@ -34,9 +33,7 @@ export default function EmploymentExperienceList({
               </Typography>
             </Grid>
             <Grid item xs={5}>
-              <Typography variant="body2">
-                {experience.position}
-              </Typography>
+              <Typography variant="body2">{experience.position}</Typography>
             </Grid>
             <Grid item xs={3}>
               <Typography variant="body2" color="text.secondary">
@@ -47,6 +44,11 @@ export default function EmploymentExperienceList({
         ))
       ) : (
         <Typography variant="body2">No employment experience found.</Typography>
+      )}
+      {isEditable && (
+        <Button variant="contained" color="primary">
+          Add Experience
+        </Button>
       )}
     </Box>
   );
