@@ -28,7 +28,6 @@ export default function CVManagement({ bioFileId }: { bioFileId: string }) {
               `https://localhost:7164/api/users/downloadbio/${bioFileId}`,
               {
                 headers: {
-                  // "Content-Type": "multipart/form-data",
                   Authorization: `Bearer ${session?.user?.AccessToken}`,
                 },
                 responseType: "arraybuffer",
