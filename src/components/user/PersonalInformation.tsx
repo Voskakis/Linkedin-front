@@ -86,29 +86,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleUploadCV = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const formData = new FormData();
-      formData.append("file", e.target.files[0]);
-
-      try {
-        await axios.post(
-          `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/UploadBio`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${session?.user?.AccessToken}`,
-            },
-          }
-        );
-        alert("CV uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading CV:", error);
-      }
-    }
-  };
-
   if (!user) {
     return <Typography>Loading...</Typography>;
   }
