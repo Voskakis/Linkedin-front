@@ -12,11 +12,11 @@ import ProfileDetails from "./ProfileDetails";
 import ProfileAvatar from "./ProfileAvatar";
 import CVManagement from "./CVManagement";
 import EmploymentExperienceList from "./EmploymentExperienceList";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import authedAxios from "@/lib/axios";
 
 interface UserProfile {
   id: string;
@@ -64,42 +64,27 @@ export default function ProfilePage({ isEditable }: { isEditable: boolean }) {
           setLoading(true);
 
           const userResponse = isEditable
-            ? await axios.get<UserProfile>(
-                `https://localhost:7164/api/users/${userId}/GetPersonalInfo`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${session.user.AccessToken}`,
-                  },
-                }
+            ? await authedAxios.get<UserProfile>(
+                `/api/users/${userId}/GetPersonalInfo`
               )
-            : await axios.get<UserProfile>(
-                `https://localhost:7164/api/users/${userId}/GetUserPublicInfo/${urlParamsId}`
+            : await authedAxios.get<UserProfile>(
+                `/api/users/${userId}/GetUserPublicInfo/${urlParamsId}`
               );
 
           setUser(userResponse.data);
 
           const experienceResponse = isEditable
-            ? await axios.get<EmploymentExperience[]>(
-                `https://localhost:7164/api/users/${userId}/GetUserEmploymentExperieces`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${session.user.AccessToken}`,
-                  },
-                }
+            ? await authedAxios.get<EmploymentExperience[]>(
+                `/api/users/${userId}/GetUserEmploymentExperieces`
               )
-            : await axios.get<EmploymentExperience[]>(
-                `https://localhost:7164/api/users/${userId}/GetPublicEmploymentExperiences/${urlParamsId}`
+            : await authedAxios.get<EmploymentExperience[]>(
+                `/api/users/${userId}/GetPublicEmploymentExperiences/${urlParamsId}`
               );
 
           setEmploymentExperiences(experienceResponse.data);
 
-          const visibilityResponse = await axios.get<VisibilitySettings>(
-            `https://localhost:7164/api/users/${userId}/GetWhichArePublicInfo`,
-            {
-              headers: {
-                Authorization: `Bearer ${session.user.AccessToken}`,
-              },
-            }
+          const visibilityResponse = await authedAxios.get<VisibilitySettings>(
+            `/api/users/${userId}/GetWhichArePublicInfo`
           );
           setVisibility(visibilityResponse.data);
         } catch (error) {
@@ -127,15 +112,7 @@ export default function ProfilePage({ isEditable }: { isEditable: boolean }) {
         jwtDecode(session?.user.AccessToken as string) as any
       ).id;
       try {
-        await axios.post(
-          `https://localhost:7164/api/users/SetPublicInfo`,
-          updatedVisibility,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.AccessToken}`,
-            },
-          }
-        );
+        await authedAxios.post(`/api/users/SetPublicInfo`, updatedVisibility);
         setVisibility(updatedVisibility);
       } catch (error) {
         console.error("Error updating visibility settings:", error);

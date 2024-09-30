@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import axios from 'axios';
 import NewArticlePrompt from './ArticleCreation';
 import ArticleItem from './ArticleItem';
+import authedAxios from '@/lib/axios';
 
 export default function Timeline() {
   const [articles, setArticles] = useState<any[]>([]);
@@ -13,7 +13,7 @@ export default function Timeline() {
   useEffect(() => {
     const fetchTimeline = async () => {
       try {
-        const response = await axios.get('/api/timeline');
+        const response = await authedAxios.get('/api/timeline');
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching timeline:', error);
@@ -31,10 +31,7 @@ export default function Timeline() {
 
   return (
     <Box>
-      {/* New article creation */}
       <NewArticlePrompt />
-
-      {/* List of articles */}
       {articles.length ? (
         articles.map(article => (
           <ArticleItem key={article.id} article={article} />

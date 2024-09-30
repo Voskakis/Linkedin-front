@@ -12,8 +12,8 @@ import {
   Paper,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import axios from "axios";
 import DownloadCVButton from "../DownloadCV";
+import authedAxios from "@/lib/axios";
 
 interface User {
   id: number;
@@ -40,14 +40,7 @@ export default function UserPage({ userId }: { userId: number }) {
           return;
         }
         setLoading(true);
-        const { data } = await axios.get<User>(
-          `https://localhost:7164/api/users/GetInfo/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.AccessToken}`,
-            },
-          }
-        );
+        const { data } = await authedAxios.get<User>(`/api/users/GetInfo/${userId}`);
 
         setUser(data);
 

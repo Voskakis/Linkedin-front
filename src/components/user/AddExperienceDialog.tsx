@@ -10,8 +10,8 @@ import {
   TextField,
   Autocomplete,
 } from "@mui/material";
-import axios from "axios";
 import { useSession } from "next-auth/react";
+import authedAxios from "@/lib/axios";
 
 interface EmploymentExperience {
   company: string;
@@ -37,9 +37,9 @@ export default function AddExperienceDialog({
   const [positionId, setPositionId] = useState<number | undefined>(undefined);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [companies, setCompanies] = useState<{ id: number; companyName: string }[]>(
-    []
-  );
+  const [companies, setCompanies] = useState<
+    { id: number; companyName: string }[]
+  >([]);
   const [positions, setPositions] = useState<{ id: number; name: string }[]>(
     []
   );
@@ -48,22 +48,8 @@ export default function AddExperienceDialog({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const companiesData = await axios.get(
-          `https://localhost:7164/api/companies`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.AccessToken}`,
-            },
-          }
-        );
-        const positionsData = await axios.get(
-          `https://localhost:7164/api/positions`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user?.AccessToken}`,
-            },
-          }
-        );
+        const companiesData = await authedAxios.get(`/api/companies`);
+        const positionsData = await authedAxios.get(`/api/positions`);
         setCompanies(companiesData.data);
         setPositions(positionsData.data);
       } catch (error) {
@@ -99,7 +85,9 @@ export default function AddExperienceDialog({
           options={companies.map((option) => option.companyName)}
           onInputChange={(event, newInputValue) => setCompany(newInputValue)}
           onChange={(event, newValue: any) => {
-            const selectedCompany = companies.find((c) => c.companyName === newValue);
+            const selectedCompany = companies.find(
+              (c) => c.companyName === newValue
+            );
             setCompanyId(selectedCompany?.id);
             setCompany(selectedCompany?.companyName || newValue);
           }}

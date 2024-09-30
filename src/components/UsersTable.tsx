@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useSession } from 'next-auth/react';
 import { TextField, Box, Button, IconButton } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useRouter } from 'next/navigation';
 import ExportDialog from './ExportFileDialog';
+import authedAxios from '@/lib/axios';
 
 export default function UsersTable() {
   const { data: session, status } = useSession();
@@ -25,11 +25,7 @@ export default function UsersTable() {
       if (status === 'authenticated' && session?.user.AccessToken) {
         try {
           setLoading(true);
-          const response = await axios.get('https://localhost:7164/api/Users', {
-            headers: {
-              Authorization: `Bearer ${session.user.AccessToken}`,
-            },
-          });
+          const response = await authedAxios.get('/api/Users');
           setUsers(response.data);
           setFilteredUsers(response.data);
         } catch (error) {

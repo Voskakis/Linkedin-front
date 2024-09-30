@@ -8,10 +8,10 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { jwtDecode } from "jwt-decode";
+import authedAxios from "@/lib/axios";
 
 interface SearchResult {
   id: string;
@@ -30,13 +30,8 @@ export default function SearchBar() {
     if (query.length > 0) {
       const fetchResults = async () => {
         try {
-          const response = await axios.get(
-            `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/SearchUsersByName/${query}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.AccessToken}`,
-              },
-            }
+          const response = await authedAxios.get(
+            `/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/SearchUsersByName/${query}`
           );
           setResults(response.data);
           setOpen(true);

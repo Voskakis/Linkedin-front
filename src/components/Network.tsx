@@ -8,11 +8,11 @@ import {
   CardActionArea,
   Avatar,
 } from "@mui/material";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { jwtDecode } from "jwt-decode";
+import authedAxios from "@/lib/axios";
 
 type User = {
   id: string;
@@ -33,13 +33,8 @@ export default function NetworkPage() {
     if (status === "authenticated") {
       const fetchConnectedUsers = async () => {
         try {
-          const { data } = await axios.get(
-            `https://localhost:7164/api/users/GetConnections/${(jwtDecode(session.user.AccessToken) as any).id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.AccessToken}`,
-              },
-            }
+          const { data } = await authedAxios.get(
+            `/api/users/GetConnections/${(jwtDecode(session.user.AccessToken) as any).id}`
           );
           setUsers(data);
         } catch (error) {

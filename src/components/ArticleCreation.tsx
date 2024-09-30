@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Box, Button, Dialog, TextField } from '@mui/material';
-import axios from 'axios';
+import authedAxios from '@/lib/axios';
 
 const ArticleCreationPrompt = () => {
   const [open, setOpen] = useState(false);
@@ -10,7 +10,7 @@ const ArticleCreationPrompt = () => {
   
   const handleCreateArticle = async () => {
     try {
-      await axios.post('/api/articles', { content });
+      await authedAxios.post('/api/articles', { content });
       setOpen(false);
     } catch (err) {
       console.error('Failed to create article:', err);

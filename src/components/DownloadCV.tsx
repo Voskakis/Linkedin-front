@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
-import axios from "axios";
 import { useSession } from "next-auth/react";
+import authedAxios from "@/lib/axios";
 
-const DownloadCVButton = ({ userId, userName }: {
-	userId: number;
+const DownloadCVButton = ({
+  userId,
+  userName,
+}: {
+  userId: number;
   userName: string;
 }) => {
   const { data: session } = useSession();
@@ -24,12 +27,9 @@ const DownloadCVButton = ({ userId, userName }: {
           onClick={async () => {
             setCvLoading(true);
             try {
-              const response = await axios.get(
-                `https://localhost:7164/api/users/GetCV/${userId}`,
+              const response = await authedAxios.get(
+                `/api/users/GetCV/${userId}`,
                 {
-                  headers: {
-                    Authorization: `Bearer ${session?.user?.AccessToken}`,
-                  },
                   responseType: "blob",
                 }
               );

@@ -4,6 +4,7 @@ import { Key, useState } from 'react';
 import { Box, Typography, Button, TextField } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import axios from 'axios';
+import authedAxios from '@/lib/axios';
 
 const ArticleItem = ({ article }: { article: any }) => {
   const [likes, setLikes] = useState(article.likes || 0);
@@ -21,7 +22,7 @@ const ArticleItem = ({ article }: { article: any }) => {
             setLiked(!liked);
             setLikes(liked ? likes - 1 : likes + 1);
             try {
-              await axios.post(`/api/articles/${article.id}/like`);
+              await authedAxios.post(`/api/articles/${article.id}/like`);
             } catch (error) {
               console.error('Error liking the article:', error);
             }
@@ -37,7 +38,7 @@ const ArticleItem = ({ article }: { article: any }) => {
             const newComment = { text: comment, createdAt: new Date() };
             setComments([...comments, newComment]);
             setComment('');
-            await axios.post(`/api/articles/${article.id}/comment`, { text: comment });
+            await authedAxios.post(`/api/articles/${article.id}/comment`, { text: comment });
           } catch (error) {
             console.error('Error adding comment:', error);
           }
