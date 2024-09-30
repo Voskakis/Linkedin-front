@@ -2,13 +2,15 @@
 import {
   Box,
   Button,
-  CircularProgress as CircularProgressIcon,
   Typography,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import authedAxios from "@/lib/axios";
+import { jwtDecode } from "jwt-decode";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function CVManagement({
   bioFileId,
@@ -24,41 +26,67 @@ export default function CVManagement({
   return (
     <Box padding={3} border={1} borderColor="grey.300" borderRadius={2}>
       <Typography variant="h5" gutterBottom>
-        Your Professional Story
+        Professional Story
       </Typography>
-      <Typography variant="body1" color="textSecondary" gutterBottom>
+      {isEditable && (<Typography variant="body1" color="textSecondary" gutterBottom>
         Upload or download your CV to showcase your journey and achievements.
-      </Typography>
+      </Typography>)}
       <Button variant="contained" startIcon={<DownloadIcon />}>
         Download CV
       </Button>
       {isEditable && (
-        <label htmlFor="upload-cv">
-          <Button
-            variant="contained"
-            component="span"
-            startIcon={
-              isUpLoading ? <CircularProgressIcon /> : <CloudUploadIcon />
-            }
-            sx={{ marginLeft: 2 }}
-            onClick={async () => {
-              setIsUpLoading(true);
-              try {
+        <>
+          <input
+            accept=".pdf"
+            type="file"
+            id="upload-cv"
+            style={{ display: "none" }}
+            onChange={async (e) => {
+              if (e.target.files?.[0]) {
+                const formData = new FormData();
+                formData.append("file", e.target.files[0]);
+                setIsUpLoading(true);
                 try {
-
-                }
-                catch (error) {
-                  console.log(error);
-                }
-                finally{
+                  const { data, status } = await authedAxios.post(
+                    `https://localhost:7164/api/users/${(jwtDecode(session?.user.AccessToken as string) as any).id}/UploadBio`,
+                    formData,
+                    {
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                      },
+                    }
+                  );
+                  if (status === 200) {
+                    alert("CV uploaded successfully!");
+                    setCvId(data);
+                  }
+                } catch (error) {
+                  console.error("Error uploading CV:", error);
+                } finally {
                   setIsUpLoading(false);
                 }
               }
             }}
-          >
-            Upload New CV
-          </Button>
-        </label>
+          />
+          <label htmlFor="upload-cv">
+            <Button
+              variant="contained"
+              component="span"
+              startIcon={
+                isUpLoading ? (
+                  <Box sx={{ width: 24, height: 24, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <CircularProgress size={20} />
+                  </Box>
+                ) : (
+                  <CloudUploadIcon />
+                )
+              }
+              sx={{ marginLeft: 2 }}
+            >
+              {isUpLoading ? "Uploading..." : "Upload New CV"}
+            </Button>
+          </label>
+        </>
       )}
     </Box>
   );
