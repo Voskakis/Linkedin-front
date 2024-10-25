@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import authedAxios from "@/lib/axios";
 import { useSession } from "next-auth/react";
+import { jwtDecode } from "jwt-decode";
 
 const SettingsForm = () => {
   const { data: session } = useSession();
@@ -17,10 +18,10 @@ const SettingsForm = () => {
     try {
       const endpoint = type === "email" ? "changeemail" : "changepassword";
 
-      await authedAxios.put(
+      await authedAxios.post(
         "https://localhost:7164/api/authenticate/" + endpoint,
         {
-          Email: type === "email" ? email : session?.user.email,
+          Email: type === "email" ? email : (jwtDecode(session?.user.AccessToken as string) as any).email,
           Password: type === "password" ? password : null,
         }
       );
