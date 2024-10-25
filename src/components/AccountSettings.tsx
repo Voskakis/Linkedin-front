@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
-import axios from "axios";
+import authedAxios from "@/lib/axios";
+import { useSession } from "next-auth/react";
 
 const SettingsForm = () => {
+  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,11 +15,15 @@ const SettingsForm = () => {
   const handleUpdate = async (type: "email" | "password") => {
     setLoading(true);
     try {
-      const endpoint =
-        type === "email" ? "/api/settings/email" : "/api/settings/password";
-      const payload = type === "email" ? { email } : { password };
+      const endpoint = type === "email" ? "changeemail" : "changepassword";
 
-      await axios.put(endpoint, payload);
+      await authedAxios.put(
+        "https://localhost:7164/api/authenticate/" + endpoint,
+        {
+          Email: type === "email" ? email : session?.user.email,
+          Password: type === "password" ? password : null,
+        }
+      );
       setMessage(
         `${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully.`
       );
@@ -40,7 +46,6 @@ const SettingsForm = () => {
       boxShadow={3}
       borderRadius={2}
     >
-      {/* Header Section */}
       <Typography variant="h4" component="h1" gutterBottom>
         Account Settings
       </Typography>
@@ -48,8 +53,6 @@ const SettingsForm = () => {
         Manage your account information here. You can update your email and
         password.
       </Typography>
-
-      {/* Update Email Section */}
       <TextField
         label="New Email"
         type="email"
@@ -67,8 +70,6 @@ const SettingsForm = () => {
       >
         Update Email
       </Button>
-
-      {/* Update Password Section */}
       <TextField
         label="New Password"
         type="password"
@@ -86,8 +87,6 @@ const SettingsForm = () => {
       >
         Update Password
       </Button>
-
-      {/* Feedback Message */}
       {message && (
         <Typography variant="body2" color="textSecondary" textAlign="center">
           {message}
